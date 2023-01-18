@@ -19,7 +19,6 @@ resource "aws_security_group" "alb-sg" {
     to_port     = 443
     protocol    = "tcp"
     self        = false
-
   }
   egress {
     description = "Allow all IP and Ports outbound to client or Cloudfront"
@@ -28,11 +27,7 @@ resource "aws_security_group" "alb-sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
 }
-
-
-
 
 # Apache EC2 SG for Auto Scaling or apache install
 resource "aws_security_group" "ec2-apache-sg" {
