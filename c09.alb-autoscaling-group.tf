@@ -43,7 +43,7 @@ resource "aws_lb_target_group" "tcc-web-tg-http" {
 # Auto Scaling Attachment Apache Instances
 resource "aws_autoscaling_attachment" "tcc-web-ag-attach" {
   autoscaling_group_name = aws_autoscaling_group.tcc-asg-web.id
-  alb_target_group_arn   = aws_lb_target_group.tcc-web-tg-http.arn
+  lb_target_group_arn    = aws_lb_target_group.tcc-web-tg-http.arn
 }
 
 # Apache Launch Temp
@@ -52,7 +52,9 @@ resource "aws_launch_template" "tcc-l-t-web" {
   instance_type          = var.web_instance_type
   key_name               = var.key_pair
   vpc_security_group_ids = [aws_security_group.ec2-apache-sg.id]
-
+  tags = {
+    Name = "WP Apache Web Server"
+  }
   block_device_mappings {
     device_name = "/dev/sda1"
     ebs {
@@ -76,7 +78,6 @@ resource "aws_launch_template" "tcc-l-t-web" {
     availability_zone = "us-east-2c"
   }
 }
-
 
 # Auto Scaling Policy 
 resource "aws_autoscaling_policy" "target-tracking-scaling" {
@@ -102,8 +103,12 @@ resource "aws_autoscaling_group" "tcc-asg-web" {
   health_check_grace_period = 300
   health_check_type         = "ELB"
   force_delete              = true
-  tags                      = [var.tags_default]
-  vpc_zone_identifier       = [aws_subnet.vpc-tcc-pri-us-east-2-abc[1].id, aws_subnet.vpc-tcc-pri-us-east-2-abc[2].id]
+  tag {
+    key                 = "Name"
+    value               = "WP Apache Web Server"
+    propagate_at_launch = true
+  }
+  vpc_zone_identifier = [aws_subnet.vpc-tcc-pri-us-east-2-abc[1].id, aws_subnet.vpc-tcc-pri-us-east-2-abc[2].id]
 
   launch_template {
     id      = aws_launch_template.tcc-l-t-web.id

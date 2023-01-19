@@ -107,6 +107,12 @@ variable "cf_comment" {
 }
 
 # Route 53
+
+variable "tcc_zone_name" {
+  description = "URL for route 53 zone"
+  type        = string
+}
+
 variable "record_tcc-A" {
   description = "A Record for TCC"
   type        = string
@@ -182,5 +188,3 @@ variable "rds_username" {
   description = "RDS username"
   type        = string
 }
-
-

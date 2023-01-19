@@ -34,7 +34,6 @@ resource "aws_db_instance" "wordpress-database" {
   parameter_group_name                  = "default.mysql8.0"
   performance_insights_retention_period = 0
   port                                  = 3306
-  security_group_names                  = []
   skip_final_snapshot                   = true
   storage_encrypted                     = var.rds_storage_encrypted
   storage_throughput                    = 0

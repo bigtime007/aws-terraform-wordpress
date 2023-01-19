@@ -68,7 +68,7 @@ resource "aws_route_table_association" "vpc-tcc-pri-route-table-associate" {
 resource "aws_route" "vpc-tcc-pri-route" {
   route_table_id         = aws_route_table.vpc-tcc-pri-route-table.id
   destination_cidr_block = "0.0.0.0/0"
-  instance_id            = aws_instance.nat_instance.id
+  network_interface_id   = aws_instance.nat_instance.primary_network_interface_id
   depends_on             = [aws_instance.nat_instance]
 }
 
